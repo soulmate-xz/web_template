@@ -1,0 +1,49 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks.git
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: pretty-format-json
+        args: ["--autofix", "--no-sort-keys", "--no-ensure-ascii", "--indent", "2"]
+  - repo: https://github.com/PyCQA/isort.git
+    rev: 6.0.0
+    hooks:
+      - id: isort
+  - repo: https://github.com/psf/black.git
+    rev: 25.1.0
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/flake8.git
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+  - repo: https://github.com/codespell-project/codespell.git
+    rev: v2.2.4
+    hooks:
+      - id: codespell
+        exclude: cert.*|test/data/.*
+  - repo: local
+    hooks:
+      - id: python-no-print
+        name: check for print()
+        description: 'A quick check for the `print()` built-in function'
+        entry: '\bprint\('
+        language: pygrep
+        types: [python]
+        exclude: ^scripts/
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: python
+        'types_or': [python, pyi]
+        require_serial: true
+        args: ["--scripts-are-modules"]
+        minimum_pre_commit_version: '2.9.2'
